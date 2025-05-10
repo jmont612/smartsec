@@ -106,7 +106,6 @@ NOTE: This file contains all scripts for the actual Template.
      });
   };
 
-
   /*************************
            Sticky
   *************************/
@@ -523,9 +522,9 @@ NOTE: This file contains all scripts for the actual Template.
   /*************************
     Lenis Smooth Scroll
   *************************/
-
+  let lenis;
   POTENZA.lenisSmoothScroll = function () {
-    const lenis = new Lenis({
+      lenis = new Lenis({
       smoothWheel: true,
       smoothTouch: true,
       lerp: 0.1,
@@ -591,6 +590,27 @@ NOTE: This file contains all scripts for the actual Template.
 
     updateScrollbar();
   }
+
+  POTENZA.lenisAnchorLinks = function () {
+    $('a[href^="#"]').on('click', function (e) {
+      const target = $(this).attr('href');
+      const destination = document.querySelector(target);
+      
+      if (destination) {
+        e.preventDefault();
+        lenis.scrollTo(destination, {
+          offset: 0,
+          duration: 1.2,
+          easing: (t) => 1 - Math.pow(1 - t, 3), // easeOutCubic
+        });
+ 
+        // Cierra el offcanvas en mobile (opcional)
+        if ($('.offcanvas.show').length > 0) {
+          $('.offcanvas').offcanvas('hide');
+        }
+      }
+    });
+  };
 
   /*************************
       Cursor
@@ -825,6 +845,7 @@ NOTE: This file contains all scripts for the actual Template.
     POTENZA.offcanvasSidebar(),
     POTENZA.lenisSmoothScroll(),
     POTENZA.lenisSmoothScroll2(),
+    POTENZA.lenisAnchorLinks(),
     POTENZA.isSticky(),
     POTENZA.goToTop(),
     POTENZA.countdownTimer(),
